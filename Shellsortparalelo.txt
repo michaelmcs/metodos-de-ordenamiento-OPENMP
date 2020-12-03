@@ -1,0 +1,35 @@
+#include <iostream>
+#include <omp.h>
+using namespace std;
+int main()
+{
+int i=0, j=0, incrmnto=0, temp=0;
+int v2[] = {3,2,1,5,4}; //vector desordenado NARRAY = 5
+	incrmnto = 5/2;
+	#pragma omp parallel default(none) firstprivate(incrmnto) shared(v2) private(i, j, temp)//Con firstprivate mantengo el valor inicializado anteriormente de incrmnto
+	{
+		while (incrmnto > 0)
+		{
+			#pragma omp for
+			for (i=incrmnto; i < 5; i++)
+			{
+				j = i;
+				temp = v2[i];
+				while ((j >= incrmnto) && (v2[j-incrmnto] > temp))
+				{
+					v2[j] = v2[j - incrmnto];
+					j = j - incrmnto;
+				}
+				v2[j] = temp;
+			}
+			incrmnto /= 2;
+		}
+	}
+cout<<"ordenamiento Paralelo de Shell Sort ";
+ #pragma omp for
+ for(i=0;i<5;i++){
+        cout<<" ";
+           cout<<v2[i];
+    }
+return 0;
+}

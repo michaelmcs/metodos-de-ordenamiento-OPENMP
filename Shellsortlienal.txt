@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+int i, j, incrmnto=0, temp;
+int v2[] = {3,2,1,5,4}; //vector desordenado =NARRAY = 5
+	incrmnto = 5/2;
+	while (incrmnto > 0)
+	{
+		for (i=incrmnto; i < 5; i++)
+		{
+			j = i;
+			temp = v2[i];
+			while ((j >= incrmnto) && (v2[j-incrmnto] > temp))
+			{
+				v2[j] = v2[j - incrmnto];
+				j = j - incrmnto;
+			}
+			v2[j] = temp;
+		}
+		incrmnto /= 2;
+	}
+cout<<"ordenamiento secuencial Shell Sort  ";
+ for(i=0;i<5;i++){
+        cout<<" ";
+           cout<<v2[i];
+    }
+return 0;
+}

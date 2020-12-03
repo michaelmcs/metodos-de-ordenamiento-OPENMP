@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1602628604 source:d:\nube\unap\8\computacion paralela\c\trabajofinaltodoenunoparalelo\main.cpp
+	<iostream>
+	<stdlib.h>
+	<time.h>
+	<omp.h>
+
