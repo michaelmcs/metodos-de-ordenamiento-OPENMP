@@ -1,0 +1,33 @@
+by:mcs
+#include <iostream>
+//Ordenamiento burbujeo lineal
+using namespace std;
+int main()
+{
+int i,j;
+int iAux;
+int  v2[] = {3,2,1,5,4}; //vector en desordenado
+int iPaso=1;
+bool bandera;
+	do
+	{
+		bandera=true;
+		for(i=0;i<5-iPaso;i++)
+		{
+			if(v2[i]>v2[i+1])
+			{
+				iAux	= v2[i];
+				v2[i]	= v2[i+1];
+				v2[i+1]	= iAux;
+				bandera=false;
+			}
+		}
+		iPaso++;
+	}while(!bandera);
+
+cout<<"odenamiento de burbujeo ";
+//imprimiedo datos
+for(i=0;i<5;i++){
+  cout<<v2[i];
+}
+}

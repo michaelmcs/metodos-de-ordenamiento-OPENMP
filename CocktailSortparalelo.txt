@@ -1,0 +1,44 @@
+by:mcs
+#include <iostream>
+#include <omp.h>
+using namespace std;
+int main()
+{
+int a,cambio;
+int v2[] = {3,2,1,5,4}; //vector desordenado  NARRAY = 5
+int t=0;
+	#pragma omp parallel default(none) shared(v2) private(a, t, cambio)
+	do
+	{
+		cambio = 0;
+		#pragma omp for
+		for(a=5-1; a>0; --a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+		#pragma omp for
+		for(a=1; a < 5; ++a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+	}while(cambio);
+   cout<<"ordenamiento Paralelo de Cocktail Sort  ";
+ #pragma omp for
+ for(a=0;a<5;a++){
+        cout<<" ";
+           cout<<v2[a];
+    }
+return 0;
+}

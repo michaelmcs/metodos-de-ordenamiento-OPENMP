@@ -1,0 +1,41 @@
+by:mcs
+#include <iostream>
+using namespace std;
+int main()
+{
+int a;
+int cambio;
+int  v2[] = {3,2,1,5,4};
+int t;
+	do
+	{
+		cambio = 0;
+		for(a=5-1; a>0; --a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+		for(a=1; a < 5; ++a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+	}while(cambio);
+cout<<"ordenamiento de Cocktail Sort  ";
+
+ for(a=0;a<5;a++){
+    cout<<" ";
+    cout<<v2[a];
+}
+   return 0;
+}

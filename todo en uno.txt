@@ -1,0 +1,298 @@
+------------burbujeosecuencial
+#include <iostream>
+//Ordenamiento burbujeo lineal
+using namespace std;
+int main()
+{
+int i,j;
+int iAux;
+int  v2[] = {3,2,1,5,4}; //vector en desordenado
+int iPaso=1;
+bool bandera;
+	do
+	{
+		bandera=true;
+		for(i=0;i<5-iPaso;i++)
+		{
+			if(v2[i]>v2[i+1])
+			{
+				iAux	= v2[i];
+				v2[i]	= v2[i+1];
+				v2[i+1]	= iAux;
+				bandera=false;
+			}
+		}
+		iPaso++;
+	}while(!bandera);
+
+cout<<"odenamiento de burbujeo ";
+//imprimiedo datos
+for(i=0;i<5;i++){
+  cout<<v2[i];
+}
+}
+
+-------------------burbujeoparalelo-----------------------------
+#include <iostream>
+#include <omp.h>
+using namespace std;
+int main()
+{
+int fase;
+int tmp;
+int v2[] = {3,2,1,5,4};//int  v2[] = {11,9,10,7,4};
+int i,j;
+
+	#pragma omp parallel default(none) shared(v2) private(i, tmp, fase)//Usando default fuerzo a decidir el scope de TODAS las variables
+	for (fase=0; fase<5;fase++)
+	{
+		if(fase % 2 == 0)
+			#pragma omp for
+			for (i=1;i<5;i+=2)
+			{
+				if(v2[i-1]>v2[i])
+				{
+					tmp = v2[i-1];
+					v2[i-1] = v2[i];
+					v2[i] = tmp;
+				}
+			}
+		else
+			#pragma omp for
+			for(i=1;i<5-1;i+=2)
+			{
+				if(v2[i]>v2[i+1])
+				{
+					tmp=v2[i+1];
+					v2[i+1] = v2[i];
+					v2[i]= tmp;
+				}
+			}
+	}
+cout<<"odenamiento de burbujeo paralelo ";
+#pragma omp for
+for(i=0;i<5;i++){
+    cout<<" ";
+  cout<<v2[i];
+}
+    return 0;
+}
+
+============================================coctaiksortsecuencial================================
+#include <iostream>
+using namespace std;
+int main()
+{
+int a;
+int cambio;
+int  v2[] = {3,2,1,5,4};
+int t;
+	do
+	{
+		cambio = 0;
+		for(a=5-1; a>0; --a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+		for(a=1; a < 5; ++a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+	}while(cambio);
+cout<<"ordenamiento de Cocktail Sort  ";
+
+ for(a=0;a<5;a++){
+    cout<<" ";
+    cout<<v2[a];
+}
+   return 0;
+}
+
+=========================Cocktailsort paralelo=====================================
+
+#include <iostream>
+#include <omp.h>
+using namespace std;
+int main()
+{
+int a,cambio;
+int v2[] = {3,2,1,5,4}; //vector desordenado  NARRAY = 5
+int t=0;
+	#pragma omp parallel default(none) shared(v2) private(a, t, cambio)
+	do
+	{
+		cambio = 0;
+		#pragma omp for
+		for(a=5-1; a>0; --a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+		#pragma omp for
+		for(a=1; a < 5; ++a)
+		{
+			if(v2[a-1] > v2[a])
+			{
+				t = v2[a-1];
+				v2[a-1] = v2[a];
+				v2[a] = t;
+				cambio = 1;
+			}
+		}
+	}while(cambio);
+   cout<<"ordenamiento Paralelo de Cocktail Sort  ";
+ #pragma omp for
+ for(a=0;a<5;a++){
+        cout<<" ";
+           cout<<v2[a];
+    }
+return 0;
+}
+
+=============================shellsortsecuencial===============================
+
+#include <iostream>
+using namespace std;
+int main()
+{
+int i, j, incrmnto=0, temp;
+int v2[] = {3,2,1,5,4}; //vector desordenado =NARRAY = 5
+	incrmnto = 5/2;
+	while (incrmnto > 0)
+	{
+		for (i=incrmnto; i < 5; i++)
+		{
+			j = i;
+			temp = v2[i];
+			while ((j >= incrmnto) && (v2[j-incrmnto] > temp))
+			{
+				v2[j] = v2[j - incrmnto];
+				j = j - incrmnto;
+			}
+			v2[j] = temp;
+		}
+		incrmnto /= 2;
+	}
+cout<<"ordenamiento secuencial Shell Sort  ";
+ for(i=0;i<5;i++){
+        cout<<" ";
+           cout<<v2[i];
+    }
+return 0;
+}
+
+============================================shellsort paralelo==================================
+
+#include <iostream>
+#include <omp.h>
+using namespace std;
+int main()
+{
+int i=0, j=0, incrmnto=0, temp=0;
+int v2[] = {3,2,1,5,4}; //vector desordenado NARRAY = 5
+	incrmnto = 5/2;
+	#pragma omp parallel default(none) firstprivate(incrmnto) shared(v2) private(i, j, temp)//Con firstprivate mantengo el valor inicializado anteriormente de incrmnto
+	{
+		while (incrmnto > 0)
+		{
+			#pragma omp for
+			for (i=incrmnto; i < 5; i++)
+			{
+				j = i;
+				temp = v2[i];
+				while ((j >= incrmnto) && (v2[j-incrmnto] > temp))
+				{
+					v2[j] = v2[j - incrmnto];
+					j = j - incrmnto;
+				}
+				v2[j] = temp;
+			}
+			incrmnto /= 2;
+		}
+	}
+cout<<"ordenamiento Paralelo de Shell Sort ";
+ #pragma omp for
+ for(i=0;i<5;i++){
+        cout<<" ";
+           cout<<v2[i];
+    }
+return 0;
+}
+
+
+=================================  insertion secuencial======================================
+
+#include <iostream>
+using namespace std;
+int main()
+{
+int i, j, aux;
+int v2[] = {3,2,1,5,4}; //vector desordenado NARRAY = 5
+
+	for (i=1; i<5; i++)
+	{
+		aux = v2[i];
+		j = i;
+		while ((j>0) && (v2[j-1] > aux))
+		{
+			v2[j] = v2[j-1];
+			j = j - 1;
+		}
+		v2[j] = aux;
+	}
+
+cout<<"Ordenamiento Secuencial de Insertion Sort  ";
+ for(i=0;i<5;i++){
+        cout<<" ";
+           cout<<v2[i];
+    }
+return 0;
+}
+
+===================================insertion paralelo ===================================
+
+#include <iostream>
+#include <omp.h>
+using namespace std;
+int main()
+{
+int i, j, aux;
+int v2[] = {3,2,1,5,4}; //vector desordenado NARRAY = 5
+	#pragma omp parallel for default(none) shared(v2) private(i, j, aux)
+	for (i=1; i<5; i++)
+	{
+		aux = v2[i];
+		j = i;
+		while ((j>0) && (v2[j-1] > aux))
+		{
+			v2[j] = v2[j-1];
+			j = j - 1;
+		}
+		v2[j] = aux;
+	}
+cout<<"ordenamiento Paralelo de Insertion sort  ";
+ for(i=0;i<5;i++){
+      cout<<" ";
+      cout<<v2[i];
+    }
+return 0;
+}
+
+===========================FIN========================
